@@ -435,6 +435,16 @@ const PagesRoutes = [
     layout: "FullLayout",
   },
   {
+    path: "/auth/verify",
+    component: lazy(() => import("../../view/pages/auth/email-verification")),
+    layout: "FullLayout",
+  },
+  {
+    path: "/auth/verification",
+    component: lazy(() => import("../../view/pages/auth/verify")),
+    layout: "FullLayout",
+  },
+  {
     path: "/pages/authentication-modern/reset-password",
     component: lazy(() =>
       import("../../view/pages/authentication-modern/reset-password")

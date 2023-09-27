@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { Col, Row } from 'antd'
-import { Messages1 } from 'iconsax-react'
+import { ArrowCircleRight } from 'iconsax-react'
 
 import MenuLogo from '../../../layout/components/menu/logo'
 
@@ -14,14 +14,13 @@ export default function Header() {
 
             <Col>
                 <Row align="middle">
-                    <span className="hp-p1-body hp-text-color-black-100 hp-text-color-dark-0 hp-mr-24 hp-d-block hp-auth-header-title">Need Help?</span>
-                    <a href="#" className="hp-d-flex-center">
-                        <Messages1
+                    <a href="https://ciku.co" className="hp-d-flex-center">
+                        <ArrowCircleRight
                             size="24"
                             variant="Bold"
                             className="hp-text-color-black-100 hp-text-color-dark-0"
                         />
-                        <span className="hp-ml-6 hp-d-block hp-p1-body hp-text-color-black-100 hp-text-color-dark-0">Support</span>
+                        <span className="hp-ml-6 hp-d-block hp-p1-body hp-text-color-black-100 hp-text-color-dark-0">Go to Website</span>
                     </a>
                 </Row>
             </Col>

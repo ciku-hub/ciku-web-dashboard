@@ -12,12 +12,18 @@ export default function Login() {
 
   return (
     <Row className="hp-authentication-page hp-d-flex" style={{ flexDirection: "column" }}>
-   
+      
+      <Col span={24}>
+        <Header />
+      </Col>
+
       <Col flex="1 0 0" className="hp-px-32">
         <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
           <Col span={24}>
             <h1>Login</h1>
-
+            <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
+                Login to your Ciku Account
+              </span>
             <Form
               layout="vertical"
               name="basic"
@@ -75,7 +81,7 @@ export default function Login() {
 
               <Link
                 className="hp-text-color-primary-1 hp-text-color-dark-primary-2 hp-caption"
-                to="/auth/register"
+                to="/auth/verification"
               >
                 Create an account
               </Link>
@@ -84,9 +90,7 @@ export default function Login() {
         </Row>
       </Col>
 
-      <Col span={24}>
-        <Footer />
-      </Col>
+
     </Row>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import {
   RiCloseFill,
   RiCheckboxCircleFill,
@@ -13,19 +13,21 @@ import { postRequest } from "../../../../utils/APIRequest";
 
 import Header from "../header";
 
-export default function SignUp() {
+export default function VerifyMail() {
+  const history = useHistory(); // Initialize the useHistory hook
+
   const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [emailDisabled, setEmailDisabled] = useState(false);
-
-  const [stepEmail, setStepEmail] = useState(false)
-  const [stepPassword, setStepPassword] = useState(false)
-  const [stepPasswordConfirm, setStepPasswordConfirm] = useState(false)
+  const [buttonDisabled, setButtonDisabled] = useState(true);
+  
 
   // Function to handle the email input change
   const handleEmailChange = (e) => {
-    setEmail(e.target.value); // Update the email state with the input value
+    const newEmail = e.target.value;
+    setEmail(newEmail); // Update the email state with the input value
+
+    // Enable or disable the button based on whether the email is empty
+    setButtonDisabled(newEmail === "");
   };
 
   // get email verification code
@@ -36,7 +38,7 @@ export default function SignUp() {
 
       const response = await postRequest('/verification/email/code', {  
         "email_address": email });
-      
+    
       notification.open({
         description: response.message,
         icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
@@ -44,8 +46,10 @@ export default function SignUp() {
           <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
         ),
       });
-      setStepEmail(true);
-      setEmailDisabled(true);
+
+       // Redirect to /auth/verify with the email as a query parameter
+       history.push(`/auth/verify?email=${email}`);
+    
     } catch (error) {
       console.error(error);
       notification.open({
@@ -71,60 +75,31 @@ export default function SignUp() {
       <Col flex="1 0 0" className="hp-px-32">
         <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
           <Col span={24}>
-            <h1>Register</h1>
+            <h1>Get Started</h1>
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
-              Complete your registration
+                Please provide your active email address
             </span>
             <Form
               layout="vertical"
               name="basic"
               className="hp-mt-sm-16 hp-mt-32"
             >
-              <Form.Item label="Firstname:">
+            <Form.Item label="Email address:">
                 <Input 
                 id="error" 
-                placeholder="Firstname"
-                value={email} // Bind the input value to the email state
-                disabled={emailDisabled}
+                placeholder="Email"
+                value={email}
                 onChange={handleEmailChange} />
               </Form.Item>
-
-              <Form.Item label="Lastname:">
-                <Input 
-                id="error" 
-                placeholder="Lastname"
-                value={email} // Bind the input value to the email state
-                disabled={emailDisabled}
-                onChange={handleEmailChange} />
-              </Form.Item>
-             
-              <Form.Item label="Email Address:">
-                <Input 
-                id="error" 
-                placeholder="Email Address"
-                value={email} // Bind the input value to the email state
-                disabled={emailDisabled}
-                onChange={handleEmailChange} />
-              </Form.Item>
-             
-              <Form.Item
-                label="Password"
-                name="password"
-                rules={[
-                  { required: true, message: "Please input your password!" },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-
-              <Form.Item className="hp-mt-16 hp-mb-0">
-                <Button block type="primary" htmlType="submit">
-                  Sign up
-                </Button>
-              </Form.Item>
-             
             </Form>
-
+            <Button block 
+                type="primary" 
+                onClick={getVerificationCode}
+                loading={loading}
+                disabled={buttonDisabled}
+                >
+                Continue
+            </Button>
             <div className="hp-form-info hp-text-center hp-mt-8">
               <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-mr-4">
                 Already have an account?

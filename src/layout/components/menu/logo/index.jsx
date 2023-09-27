@@ -51,18 +51,6 @@ export default function MenuLogo(props) {
           </svg>
         </div>
       </Link>
-
-      {
-        !props.small && (
-          <a
-            href="https://hypeople-studio.gitbook.io/yoda/change-log"
-            target="_blank"
-            className="hp-caption hp-font-weight-400 hp-text-color-primary-1"
-          >
-            v.{themeConfig.version}
-          </a>
-        )
-      }
     </div>
   );
 };

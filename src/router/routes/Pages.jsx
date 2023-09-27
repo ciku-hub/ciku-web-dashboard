@@ -430,8 +430,8 @@ const PagesRoutes = [
     layout: "FullLayout",
   },
   {
-    path: "/pages/authentication-modern/register",
-    component: lazy(() => import("../../view/pages/authentication-modern/register")),
+    path: "/auth/register",
+    component: lazy(() => import("../../view/pages/auth/register")),
     layout: "FullLayout",
   },
   {

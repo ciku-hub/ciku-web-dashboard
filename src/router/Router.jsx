@@ -25,6 +25,7 @@ import FullLayout from "../layout/FullLayout";
 
 // Components
 import Analytics from "../view/main/dashboard/analytics";
+import Login from "../view/pages/auth/login";
 import Error404 from "../view/pages/errors/404";
 
 export default function Router() {
@@ -169,13 +170,9 @@ export default function Router() {
                     render={() => {
                         return (
                             DefaultLayout == "HorizontalLayout" ? (
-                                <Layouts.HorizontalLayout>
-                                    <Analytics />
-                                </Layouts.HorizontalLayout>
+                                <Login />
                             ) : (
-                                <Layouts.VerticalLayout>
-                                    <Analytics />
-                                </Layouts.VerticalLayout>
+                                <Login />
                             )
                         )
                     }}

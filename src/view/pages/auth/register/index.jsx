@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation,  useHistory } from "react-router-dom";
 import {
   RiCloseFill,
   RiCheckboxCircleFill,
@@ -15,6 +15,7 @@ import Header from "../header";
 export default function SignUp() {
   // Use the useLocation hook to access the location object
   const location = useLocation();
+  const history = useHistory();
 
   // Retrieve the email from the location state (if available)
   const retrieveEmail = location.state && location.state.email;
@@ -22,7 +23,7 @@ export default function SignUp() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [password, setpassword] = useState("");
+  const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(false);
@@ -32,18 +33,22 @@ export default function SignUp() {
     setEmail(e.target.value); // Update the email state with the input value
   };
 
-  // get email verification code
-  const getVerificationCode = async () => {
+  // complete Registration
+  const completeRegistration = async () => {
     try {
       setLoading(true);
       setButtonDisabled(true);
 
-      const response = await postRequest("/verification/email/code", {
-        email_address: email,
+      const response = await postRequest("/auth/register", {
+        "firstname": firstname,
+        "lastname":lastname,
+        "phone_number":phoneNumber,
+        "email": email,
+        "password":password
       });
 
       notification.open({
-        description: response.message,
+        description: "Succesfully Register, you can now login",
         icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
         closeIcon: (
           <RiCloseFill
@@ -52,6 +57,8 @@ export default function SignUp() {
           />
         ),
       });
+      // Redirect to /
+      history.push("/");
     } catch (error) {
       console.error(error);
       notification.open({
@@ -102,7 +109,7 @@ export default function SignUp() {
                   id="error"
                   placeholder="Firstname"
                   value={firstname}
-                  onChange={() => setFirstname(firstname)}
+                  onChange={(e) => setFirstname(e.target.value)}
                 />
               </Form.Item>
 
@@ -117,19 +124,12 @@ export default function SignUp() {
                   id="error"
                   placeholder="Lastname"
                   value={lastname}
-                  onChange={() => setLastname(lastname)}
+                  onChange={(e) => setLastname(e.target.value)}
                 />
               </Form.Item>
 
               <Form.Item
                 label="Email Address"
-                name="Email Address"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input your Email Address!",
-                  },
-                ]}
               >
                 <Input
                   id="error"
@@ -145,32 +145,44 @@ export default function SignUp() {
                 name="Phone Number"
                 rules={[
                   { required: true, message: "Please input your Phone Number!" },
+                  // { pattern: /^[0-9]+$/, message: "Please enter a valid phone number (digits only)." },
                 ]}
               >
                 <Input
                   id="error"
                   placeholder="Phone Number"
                   value={phoneNumber}
-                  onChange={() => setPhoneNumber(phoneNumber)}
+                  maxLength={11}
+                  onChange={(e) => {
+                    const input = e.target.value.replace(/\D/g, ''); // Remove non-digit characters
+                    setPhoneNumber(input);
+                  }}
                 />
               </Form.Item>
+
 
               <Form.Item
                 label="Password"
                 name="password"
                 rules={[
                   { required: true, message: "Please input your password!" },
+                  // { pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/, message: "Password must contain at least 8 characters, including at least one uppercase letter, one lowercase letter, and one digit." },
                 ]}
               >
                 <Input.Password
                   placeholder="********"
                   value={password}
-                  onChange={() => setpassword(password)}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </Form.Item>
 
               <Form.Item className="hp-mt-16 hp-mb-0">
-                <Button block type="primary" htmlType="submit">
+                <Button block 
+                type="primary" 
+                htmlType="submit"
+                onClick={completeRegistration}
+                loading={loading}
+                disabled={buttonDisabled}>
                   Sign up
                 </Button>
               </Form.Item>

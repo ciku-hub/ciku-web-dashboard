@@ -1,14 +1,63 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-import { Row, Col, Form, Input, Button, Checkbox } from "antd";
-
-import Background from "../background";
+import {
+  RiCloseFill,
+  RiCheckboxCircleFill,
+  RiErrorWarningFill,
+} from "react-icons/ri";
+import { Row, Col, Form, Input, Button, notification } from "antd";
+import { postRequest } from "../../../../utils/APIRequest";
 import Header from "../header";
-import Footer from "../footer";
 
 export default function Login() {
-  const [step, setStep] = useState(false)
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+
+  // login 
+  const login = async () => {
+    try {
+      setLoading(true);
+      setButtonDisabled(true);
+
+      const response = await postRequest("/auth/login", {
+        "email": email,
+        "password":password
+      });
+
+      notification.open({
+        description: response.message,
+        icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
+        closeIcon: (
+          <RiCloseFill
+            className="remix-icon hp-text-color-black-80"
+            size={24}
+          />
+        ),
+      });
+      // Redirect to /
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      notification.open({
+        description: error.message,
+        icon: <RiErrorWarningFill style={{ color: "#FF0022" }} />,
+        closeIcon: (
+          <RiCloseFill
+            className="remix-icon hp-text-color-black-80"
+            size={24}
+          />
+        ),
+      });
+    } finally {
+      setLoading(false); // Set loading to false when request completes (whether success or error)
+      setButtonDisabled(false);
+    }
+  };
+
 
   return (
     <Row className="hp-authentication-page hp-d-flex" style={{ flexDirection: "column" }}>
@@ -24,55 +73,52 @@ export default function Login() {
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
                 Login to your Ciku Account
               </span>
-            <Form
-              layout="vertical"
-              name="basic"
-              initialValues={{ remember: true }}
-              className="hp-mt-sm-16 hp-mt-32"
-            >
-              <Form.Item label="Username :" className="hp-mb-16">
-                <Input id="error" />
+              <Form layout="vertical" name="basic" className="hp-mt-sm-16 hp-mt-32">
+              <Form.Item
+                label="Email Address"
+                name="Email Address"
+                rules={[
+                  { required: true, message: "Please input your Email Address!" },
+                ]}
+              >
+                <Input
+                  id="error"
+                  placeholder={email}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </Form.Item>
 
-              {
-                step && (
-                  <>
-                    <Form.Item label="Password :" className="hp-mb-8">
-                      <Input.Password id="warning2" />
-                    </Form.Item>
-
-                    <Row align="middle" justify="space-between">
-                      <Form.Item className="hp-mb-0">
-                        <Checkbox name="remember">Remember me</Checkbox>
-                      </Form.Item>
-
-                      <Link
-                        className="hp-button hp-text-color-black-80 hp-text-color-dark-40"
-                        to="/pages/authentication-modern/recover-password"
-                      >
-                        Forgot Password?
-                      </Link>
-                    </Row>
-
-                    <Form.Item className="hp-mt-16 hp-mb-0">
-                      <Link to="/">
-                        <Button block type="primary" htmlType="submit">
-                          Sign in
-                        </Button>
-                      </Link>
-                    </Form.Item>
-                  </>
-                )
-              }
-            </Form>
-
-            {
-              !step && (
-                <Button block type="primary" onClick={() => setStep(true)}>
-                  Continue
+              <Form.Item
+                label="Password"
+                name="password"
+                rules={[
+                  { required: true, message: "Please input your password!" },
+                ]}
+              >
+                <Input.Password
+                  placeholder="********"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </Form.Item>
+              <Link
+                className="hp-text-color-primary-1 hp-text-color-dark-primary-2 hp-caption hp-text-center"
+                to="/auth/recover-password"
+              >
+                Forget Password?
+              </Link>
+              <Form.Item className="hp-mt-16 hp-mb-0">
+                <Button block 
+                type="primary" 
+                htmlType="submit"
+                onClick={login}
+                loading={loading}
+                disabled={buttonDisabled}>
+                  Login
                 </Button>
-              )
-            }
+              </Form.Item>
+            </Form>
 
             <Col className="hp-form-info hp-text-center hp-mt-8">
               <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">

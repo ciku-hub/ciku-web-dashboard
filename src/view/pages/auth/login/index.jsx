@@ -91,9 +91,13 @@ export default function Login() {
               <Form layout="vertical" name="basic" className="hp-mt-sm-16 hp-mt-32">
               <Form.Item
                 label="Email Address"
-                name="Email Address"
+                name="email"
                 rules={[
                   { required: true, message: "Please input your Email Address!" },
+                  {
+                    type: 'email',
+                    message: 'Please enter a valid email address!',
+                  },
                 ]}
               >
                 <Input

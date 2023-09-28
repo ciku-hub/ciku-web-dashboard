@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation,  useHistory } from "react-router-dom";
 import {
   RiCloseFill,
@@ -13,6 +13,11 @@ import { postRequest } from "../../../../utils/APIRequest";
 import Header from "../header";
 
 export default function SignUp() {
+  useEffect(() => {
+    // Set the page title when the component mounts
+    document.title = "Register - Ciku";
+  }, []);
+
   // Use the useLocation hook to access the location object
   const location = useLocation();
   const history = useHistory();
@@ -145,7 +150,7 @@ export default function SignUp() {
                 name="Phone Number"
                 rules={[
                   { required: true, message: "Please input your Phone Number!" },
-                  // { pattern: /^[0-9]+$/, message: "Please enter a valid phone number (digits only)." },
+                  { pattern: /^[0-9]+$/, message: "Please enter a valid phone number (digits only)." },
                 ]}
               >
                 <Input

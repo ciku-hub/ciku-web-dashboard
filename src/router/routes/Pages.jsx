@@ -452,6 +452,16 @@ const PagesRoutes = [
     layout: "FullLayout",
   },
   {
+    path: "/auth/bvn",
+    component: lazy(() => import("../../view/pages/auth/bvn")),
+    layout: "FullLayout",
+  },
+  {
+    path: "/auth/pin",
+    component: lazy(() => import("../../view/pages/auth/pin")),
+    layout: "FullLayout",
+  },
+  {
     path: "/pages/blank-page",
     component: lazy(() => import("../../view/pages/blank")),
     layout: "VerticalLayout",

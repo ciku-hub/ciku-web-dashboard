@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 
 import {
   RiCloseFill,
@@ -11,6 +11,8 @@ import { postRequest } from "../../../../utils/APIRequest";
 import Header from "../header";
 
 export default function Login() {
+  const history = useHistory();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -23,13 +25,13 @@ export default function Login() {
       setLoading(true);
       setButtonDisabled(true);
 
-      const response = await postRequest("/auth/login", {
+      const responseData = await postRequest("/auth/login", {
         "email": email,
         "password":password
       });
 
       notification.open({
-        description: response.message,
+        description: responseData.message,
         icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
         closeIcon: (
           <RiCloseFill
@@ -38,8 +40,14 @@ export default function Login() {
           />
         ),
       });
-      // Redirect to /
-      console.log(response);
+
+      // Assuming the response data is available as `responseData` in your code
+      if (responseData.success && responseData.data.user.bvn_verify === 0) {
+        // Redirect to /auth/bvn with response data
+        history.push("/auth/bvn", { response: responseData });
+      } else {
+        // Handle other cases or redirects as needed
+      }
     } catch (error) {
       console.error(error);
       notification.open({
@@ -58,6 +66,13 @@ export default function Login() {
     }
   };
 
+    // Function to enable or disable the button based on values
+  useEffect(() => {
+    // Set the page title when the component mounts
+    document.title = "Login - Ciku";
+
+    setButtonDisabled(!(email && password)); 
+  }, [email, password]);
 
   return (
     <Row className="hp-authentication-page hp-d-flex" style={{ flexDirection: "column" }}>
@@ -83,7 +98,7 @@ export default function Login() {
               >
                 <Input
                   id="error"
-                  placeholder={email}
+                  placeholder="Email Address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />

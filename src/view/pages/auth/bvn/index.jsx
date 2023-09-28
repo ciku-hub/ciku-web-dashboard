@@ -1,5 +1,5 @@
 import React, {useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
 import {
   RiCloseFill,
@@ -9,39 +9,36 @@ import {
 import { Row, Col, Form, Input, Button, notification } from "antd";
 
 import { postRequest } from "../../../../utils/APIRequest";
-import Header from "../header";
 
-export default function RecoverPassword() {
-  useEffect(() => {
-    // Set the page title when the component mounts
-    document.title = "Recover Password - Ciku";
-  }, []);
-
+export default function BvnVerification() {
   const history = useHistory();
-
-  const [email, setEmail] = useState("");
+  // Use the useLocation hook to access the location object
+  const location = useLocation();
+  // Retrieve the response data from the state object
+  const responseData = location.state && location.state.response;
+  
+  const [bvn, setBVN] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [buttonDisabled, setButtonDisabled] = useState(true);
   
-  // Function to handle the email input change
-  const handleEmailChange = (e) => {
-    const newEmail = e.target.value;
-    setEmail(newEmail); // Update the email state with the input value
+  useEffect(() => {
+    // Set the page title when the component mounts
+    document.title = "Verify BVN - Ciku";
+    // Function to enable or disable the button based on code and password values
+    setButtonDisabled(!(bvn)); 
+  }, [bvn]);
+  
 
-    // Enable or disable the button based on whether the email is empty
-    setButtonDisabled(newEmail === "");
-  };
-
-  // Recover Password 
-  const recoverPassword = async () => {
+  // Verify BVN 
+  const verifyBVN = async () => {
     try {
       setLoading(true);
       setButtonDisabled(true);
 
-      const response = await postRequest("/auth/password/reset-instruction", {
-        "email": email
-      });
+      const response = await postRequest("/user/bvn/verify", {
+        "bvn":bvn
+      }, responseData.data.token);
 
       notification.open({
         description: response.message,
@@ -53,8 +50,9 @@ export default function RecoverPassword() {
           />
         ),
       });
-      // Redirect to /auth/reset-password
-      history.push("/auth/reset-password", { email });
+       // Redirect to /auth/bvn with response data
+       console.log(response);
+       //history.push("/auth/pin", { response: responseData });
     } catch (error) {
       console.error(error);
       notification.open({
@@ -76,17 +74,13 @@ export default function RecoverPassword() {
 
   return (
     <Row className="hp-authentication-page hp-d-flex" style={{ flexDirection: "column" }}>
-     
-      <Col span={24}>
-        <Header />
-      </Col>
 
       <Col flex="1 0 0" className="hp-px-32">
         <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 400 }}>
           <Col span={24}>
-            <h1>Recover Password</h1>
+            <h1>BVN Verification</h1>
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
-                Provide your email to reset your password.
+                Verify your BVN to get NGN Bank Account issue for you.
             </span>
 
             <Form
@@ -95,16 +89,18 @@ export default function RecoverPassword() {
               className="hp-mt-sm-16 hp-mt-32"
             >
               <Form.Item 
-              label="Email Address:"
-              name="Email Address"
+              label="BVN"
+              name="BVN"
               rules={[
-                { required: true, message: "Please input your Email Address!" },
+                { required: true, message: "Please input your BVN!" },
+                { pattern: /^[0-9]+$/, message: "Please enter a valid BVN (digits only)." },
               ]}>
                 <Input
                   id="error"
-                  placeholder="Enter your email address"
-                  value={email}
-                  onChange={handleEmailChange}
+                  placeholder="Enter your BVN"
+                  value={bvn}
+                  maxLength={11}
+                  onChange={(e) => setBVN(e.target.value)}
                 />
               </Form.Item>
 
@@ -113,26 +109,14 @@ export default function RecoverPassword() {
                 <Button block 
                 type="primary" 
                 htmlType="submit"
-                onClick={recoverPassword}
+                onClick={verifyBVN}
                 loading={loading}
                 disabled={buttonDisabled}>
-                  Reset Password
+                  Verify BVN
                 </Button>
               </Form.Item>
             </Form>
 
-            <div className="hp-form-info hp-text-center">
-              <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-mr-4">
-                Go back to
-              </span>
-
-              <Link
-                to="/"
-                className="hp-text-color-primary-1 hp-text-color-dark-primary-2 hp-caption"
-              >
-                Login
-              </Link>
-            </div>
           </Col>
         </Row>
       </Col>

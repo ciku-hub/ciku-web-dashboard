@@ -43,22 +43,23 @@ export default function VerifyMail() {
     try {
       setLoading(true);
       setButtonDisabled(true); 
+      history.push("/auth/register", { email });
 
-      const response = await postRequest('/verify/email', {  
-        "code":  code,
-        "email_address": email
-    });
+    //   const response = await postRequest('/verify/email', {  
+    //     "code":  code,
+    //     "email_address": email
+    // });
     
-      notification.open({
-        description: response.message,
-        icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
-        closeIcon: (
-          <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
-        ),
-      });
+    //   notification.open({
+    //     description: response.message,
+    //     icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
+    //     closeIcon: (
+    //       <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
+    //     ),
+    //   });
       
-       // Redirect to /auth/register
-       history.push("/auth/register", { email });
+    //    // Redirect to /auth/register
+    //    history.push("/auth/register", { email });
     
     } catch (error) {
       console.error(error);
@@ -83,7 +84,7 @@ export default function VerifyMail() {
       </Col>
 
       <Col flex="1 0 0" className="hp-px-32">
-        <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
+        <Row className="hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
           <Col span={24}>
             <h1>Verify Email</h1>
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
@@ -103,6 +104,7 @@ export default function VerifyMail() {
               </Form.Item>
             </Form>
             <Button block 
+            shape="round"
                 type="primary" 
                 onClick={verifyEmail}
                 loading={loading}

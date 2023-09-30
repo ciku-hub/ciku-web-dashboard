@@ -23,8 +23,6 @@ export default function Login() {
   const login = async () => {
     try {
       setLoading(true);
-      setButtonDisabled(true);
-
       const responseData = await postRequest("/auth/login", {
         "email": email,
         "password":password
@@ -82,7 +80,7 @@ export default function Login() {
       </Col>
 
       <Col flex="1 0 0" className="hp-px-32">
-        <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
+        <Row className="hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
           <Col span={24}>
             <h1>Login</h1>
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
@@ -118,13 +116,14 @@ export default function Login() {
                 />
               </Form.Item>
               <Link
-                className="hp-text-color-primary-1 hp-text-color-dark-primary-2 hp-caption hp-text-center"
+                className="hp-text-color-primary-1 block  hp-text-color-dark-primary-2 hp-caption hp-text-center"
                 to="/auth/recover-password"
               >
                 Forget Password?
               </Link>
               <Form.Item className="hp-mt-16 hp-mb-0">
                 <Button block 
+                shape="round"
                 type="primary" 
                 htmlType="submit"
                 onClick={login}

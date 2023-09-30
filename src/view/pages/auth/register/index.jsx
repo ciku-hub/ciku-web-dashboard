@@ -93,7 +93,7 @@ export default function SignUp() {
 
       <Col flex="1 0 0" className="hp-px-32">
         <Row
-          className="hp-h-100 hp-m-auto"
+          className="hp-m-auto"
           align="middle"
           style={{ maxWidth: 360 }}
         >
@@ -103,35 +103,40 @@ export default function SignUp() {
               Complete your registration
             </span>
             <Form layout="vertical" name="basic" className="hp-mt-sm-16 hp-mt-32">
-              <Form.Item
-                label="Firstname"
-                name="Firstname"
-                rules={[
-                  { required: true, message: "Please input your Firstname!" },
-                ]}
-              >
-                <Input
-                  id="error"
-                  placeholder="Firstname"
-                  value={firstname}
-                  onChange={(e) => setFirstname(e.target.value)}
-                />
-              </Form.Item>
-
-              <Form.Item
-                label="Lastname"
-                name="Lastname"
-                rules={[
-                  { required: true, message: "Please input your Lastname!" },
-                ]}
-              >
-                <Input
-                  id="error"
-                  placeholder="Lastname"
-                  value={lastname}
-                  onChange={(e) => setLastname(e.target.value)}
-                />
-              </Form.Item>
+              <Row gutter={{ xs: 8, sm: 16, md: 18, lg: 20 }}>
+                <Col span={12}>
+                  <Form.Item
+                    label="Firstname"
+                    name="Firstname"
+                    rules={[
+                      { required: true, message: "Please input your Firstname!" },
+                    ]}
+                  >
+                    <Input
+                      id="error"
+                      placeholder="Firstname"
+                      value={firstname}
+                      onChange={(e) => setFirstname(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col span={12}>
+                  <Form.Item
+                    label="Lastname"
+                    name="Lastname"
+                    rules={[
+                      { required: true, message: "Please input your Lastname!" },
+                    ]}
+                  >
+                    <Input
+                      id="error"
+                      placeholder="Lastname"
+                      value={lastname}
+                      onChange={(e) => setLastname(e.target.value)}
+                    />
+                  </Form.Item>
+                </Col>
+              </Row>
 
               <Form.Item
                 label="Email Address"
@@ -184,6 +189,7 @@ export default function SignUp() {
               <Form.Item className="hp-mt-16 hp-mb-0">
                 <Button block 
                 type="primary" 
+                shape="round"
                 htmlType="submit"
                 onClick={completeRegistration}
                 loading={loading}

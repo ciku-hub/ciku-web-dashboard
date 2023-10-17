@@ -16,6 +16,7 @@ export default function BvnVerification() {
   const location = useLocation();
   // Retrieve the response data from the state object
   const responseData = location.state && location.state.response;
+  const token =  localStorage.getItem('token');
   
   const [bvn, setBVN] = useState("");
 
@@ -29,7 +30,7 @@ export default function BvnVerification() {
     setButtonDisabled(!(bvn)); 
   }, [bvn]);
   
-
+console.log({token});
   // Verify BVN 
   const verifyBVN = async () => {
     try {
@@ -38,7 +39,7 @@ export default function BvnVerification() {
 
       const response = await postRequest("/user/bvn/verify", {
         "bvn":bvn
-      }, responseData.data.token);
+      }, token);
 
       notification.open({
         description: response.message,
@@ -52,7 +53,10 @@ export default function BvnVerification() {
       });
        // Redirect to /auth/bvn with response data
        console.log(response);
-       //history.push("/auth/pin", { response: responseData });
+       if (response.success) {
+        history.push("/auth/pin");
+      }
+       
     } catch (error) {
       console.error(error);
       notification.open({
@@ -96,7 +100,8 @@ export default function BvnVerification() {
                 { pattern: /^[0-9]+$/, message: "Please enter a valid BVN (digits only)." },
               ]}>
                 <Input
-                  id="error"
+                  id="bvn"
+                  autocomplete="off"
                   placeholder="Enter your BVN"
                   value={bvn}
                   maxLength={11}
@@ -106,7 +111,8 @@ export default function BvnVerification() {
 
       
               <Form.Item className="hp-mt-16 hp-mb-0">
-                <Button block 
+              <Button block 
+                shape="round"
                 type="primary" 
                 htmlType="submit"
                 onClick={verifyBVN}

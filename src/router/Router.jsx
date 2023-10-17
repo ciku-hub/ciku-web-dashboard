@@ -153,7 +153,7 @@ export default function Router() {
                             })}
                         </Switch>
                     </LayoutTag>
-                </Route >
+                </Route>
             );
         });
     };

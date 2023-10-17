@@ -73,7 +73,7 @@ export default function VerifyMail() {
       </Col>
 
       <Col flex="1 0 0" className="hp-px-32">
-        <Row className="hp-h-100 hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
+        <Row className="hp-m-auto" align="middle" style={{ maxWidth: 360 }}>
           <Col span={24}>
             <h1>Get Started</h1>
             <span className="hp-text-color-black-80 hp-text-color-dark-40 hp-caption hp-font-weight-400 hp-mr-4">
@@ -94,6 +94,7 @@ export default function VerifyMail() {
             </Form>
             <Button block 
                 type="primary" 
+                shape="round"
                 onClick={getVerificationCode}
                 loading={loading}
                 disabled={buttonDisabled}

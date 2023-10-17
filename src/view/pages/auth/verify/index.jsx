@@ -35,21 +35,20 @@ export default function VerifyMail() {
     try {
       setLoading(true);
       setButtonDisabled(true); 
-      history.push(`/auth/verify?email=${email}`);
 
-      // const response = await postRequest('/verification/email/code', {  
-      //   "email_address": email });
+      const response = await postRequest('/verification/email/code', {  
+        "email_address": email });
     
-      // notification.open({
-      //   description: response.message,
-      //   icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
-      //   closeIcon: (
-      //     <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
-      //   ),
-      // });
+      notification.open({
+        description: response.message,
+        icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
+        closeIcon: (
+          <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
+        ),
+      });
 
-      //  // Redirect to /auth/verify with the email as a query parameter
-      //  history.push(`/auth/verify?email=${email}`);
+       // Redirect to /auth/verify with the email as a query parameter
+       history.push(`/auth/verify?email=${email}`);
     
     } catch (error) {
       console.error(error);

@@ -43,23 +43,22 @@ export default function VerifyMail() {
     try {
       setLoading(true);
       setButtonDisabled(true); 
-      history.push("/auth/register", { email });
 
-    //   const response = await postRequest('/verify/email', {  
-    //     "code":  code,
-    //     "email_address": email
-    // });
+      const response = await postRequest('/verify/email', {  
+        "code":  code,
+        "email_address": email
+    });
     
-    //   notification.open({
-    //     description: response.message,
-    //     icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
-    //     closeIcon: (
-    //       <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
-    //     ),
-    //   });
+      notification.open({
+        description: response.message,
+        icon: <RiCheckboxCircleFill style={{ color: "#00F7BF" }} />,
+        closeIcon: (
+          <RiCloseFill className="remix-icon hp-text-color-black-80" size={24} />
+        ),
+      });
       
-    //    // Redirect to /auth/register
-    //    history.push("/auth/register", { email });
+       // Redirect to /auth/register
+       history.push("/auth/register", { email });
     
     } catch (error) {
       console.error(error);

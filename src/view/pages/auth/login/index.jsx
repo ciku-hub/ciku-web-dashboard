@@ -38,12 +38,13 @@ export default function Login() {
           />
         ),
       });
-
       // Assuming the response data is available as `responseData` in your code
-      if (responseData.success && responseData.data.user.bvn_verify === 0) {
+      if (responseData.success && responseData.data.user.bvn_verify === '0') {
+        localStorage.setItem('token',responseData.data.token);
         // Redirect to /auth/bvn with response data
         history.push("/auth/bvn", { response: responseData });
       } else {
+        history.push("/main/dashboard/analytics");
         // Handle other cases or redirects as needed
       }
     } catch (error) {
